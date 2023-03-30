@@ -42,8 +42,9 @@ export default () => {
       const dateString = dayjs().format('YYYY-MM-DD');
 
       const fileDir = path.resolve(pdfPublicDir, dateString);
-      fs.ensureDirSync(fileDir);
       const filepath = path.resolve(fileDir, filename);
+      const dir = path.dirname(filepath);
+      fs.ensureDirSync(dir);
       await webPageToPdf({
         url, filepath,
         pdfOptions,
