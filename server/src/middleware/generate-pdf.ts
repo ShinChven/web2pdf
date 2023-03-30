@@ -1,10 +1,11 @@
 import { PDFOptions } from './../../node_modules/puppeteer-core/lib/cjs/puppeteer/common/PDFOptions.d';
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs-extra';
 import webPageToPdf from '../utils/pdf';
 import dayjs from 'dayjs';
+import { GeneralError } from '@feathersjs/errors';
 
 const OUTPUT_DIR_NAME = 'output';
 
@@ -64,5 +65,7 @@ export default () => {
     } catch (err) {
       console.error(err);
     }
+    const error = new GeneralError('Error generating PDF');
+    res.status(error.code).json(error.toJSON());
   };
 };
