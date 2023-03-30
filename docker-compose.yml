@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shinchven/web2pdf
+    container_name: web2pdf
+    restart: always
+    ports:
+      - "3040:3030"
+    volumes:
+      - ./output:/usr/src/app/public/output
