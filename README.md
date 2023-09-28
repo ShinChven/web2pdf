@@ -4,7 +4,7 @@ WEB2PDF is a Docker-based application that leverages Puppeteer to convert web pa
 
 ## Deployment
 
-[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/shinchven/web2pdf)](https://hub.docker.com/r/shinchven/web2pdf)
+[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/shinchven/web2pdf)](https://hub.docker.com/r/shinchven/web2pdf) [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/shinchven/web2pdf)](https://hub.docker.com/r/shinchven/web2pdf)
 
 To deploy the WEB2PDF service, ensure that Docker and Docker Compose are installed on your system. The WEB2PDF Docker image is publicly available on Docker Hub. You can pull the image using the following command:
 
