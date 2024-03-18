@@ -1,4 +1,4 @@
-FROM shinchven/node:16-deployment
+FROM shinchven/node:20-deployment
 
 # install dependencies for chrome and puppeteer
 RUN apt update && apt install -y \
