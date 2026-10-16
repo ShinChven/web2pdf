@@ -27,6 +27,9 @@ services:
     restart: always
     ports:
       - "3040:3030"
+    environment:
+      # Leave empty to allow requests without a token
+      - API_TOKEN=${API_TOKEN:-}
     volumes:
       - ./output:/usr/src/app/public/output
 ```
@@ -50,7 +53,7 @@ WEB2PDF can be used with either GET or POST HTTP methods.
 To generate a PDF using the GET method, use the `curl` command as follows:
 
 ```bash
-curl "http://localhost:3040/generate-pdf?url=https://www.google.com&filename=google.pdf"
+curl "http://localhost:3040/action/generate-pdf?url=https://www.google.com&filename=google.pdf"
 ```
 
 In this example, a PDF of the Google homepage is created with the filename `google.pdf`.
@@ -60,7 +63,7 @@ In this example, a PDF of the Google homepage is created with the filename `goog
 To generate a PDF using the POST method, use the `curl` command like so:
 
 ```bash
-curl -X POST -F "url=https://www.google.com" -F "filename=google.pdf" http://localhost:3040/generate-pdf
+curl -X POST -F "url=https://www.google.com" -F "filename=google.pdf" http://localhost:3040/action/generate-pdf
 ```
 
 This command does the same as the previous one, but with the POST method.
@@ -77,3 +80,27 @@ The service accepts several parameters to customize the output:
 | `redirect` | If set to `true`, the service will redirect to the generated PDF file. | `false` |
 
 Please note that the `url` parameter is required. If no `filename` is provided, a UUID will be used as the file name. The `pdfOptions` parameter can be used to pass any additional options to the Puppeteer's `pdf` method. If `redirect` is set to `true`, the service will redirect to the generated PDF file instead of returning a JSON response.
+
+## API Token
+
+By default the service accepts requests from anyone who can reach it. To require a token, set the `API_TOKEN` environment variable, for example in a `.env` file next to `docker-compose.yml`:
+
+```bash
+API_TOKEN=your-secret-token
+```
+
+Leave `API_TOKEN` unset or empty to keep the default behavior.
+
+When a token is set, every request to `/action/generate-pdf` must include it, either as a Bearer token in the `Authorization` header:
+
+```bash
+curl -H "Authorization: Bearer your-secret-token" "http://localhost:3040/action/generate-pdf?url=https://www.google.com&filename=google.pdf"
+```
+
+or as a `token` parameter, which is useful for links opened in a browser with `redirect=true`:
+
+```bash
+curl "http://localhost:3040/action/generate-pdf?url=https://www.google.com&redirect=true&token=your-secret-token"
+```
+
+Requests with a missing or wrong token receive a `401 Unauthorized` response. The token protects PDF generation only; generated files under `/output/` are still served without a token.
