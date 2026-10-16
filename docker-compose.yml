@@ -10,5 +10,8 @@ services:
     restart: always
     ports:
       - "3040:3030"
+    environment:
+      # Leave empty to allow requests without a token
+      - API_TOKEN=${API_TOKEN:-}
     volumes:
       - ./output:/usr/src/app/public/output
